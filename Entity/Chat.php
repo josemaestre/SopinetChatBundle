@@ -60,6 +60,7 @@ class Chat
      *
      * @ORM\ManyToOne(targetEntity="\Sopinet\ChatBundle\Model\UserInterface", inversedBy="chatsOwned", cascade={"persist"})
      * @ORM\JoinColumn(name="admin_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     * @Groups({"create"})
      */
     protected $admin;
 
