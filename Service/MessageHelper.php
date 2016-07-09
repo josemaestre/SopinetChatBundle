@@ -130,6 +130,9 @@ class MessageHelper {
                     $response = $this->sendRealMessageToDevice($message, $device, $user);
                     if ($response) {
                         $messagePackage->setStatus(MessagePackage::STATUS_OK);
+                        if ($message->getMySenderEmailHas($this->container)) {
+                            $this->sendMessageToEmail($message, $user);
+                        }
                     } else {
                         $messagePackage->setStatus(MessagePackage::STATUS_KO);
                     }
@@ -310,5 +313,26 @@ class MessageHelper {
         $message->setDeviceIdentifier($to);
         $message->setAPSContentAvailable($contentAvailable);
         return $this->container->get('rms_push_notifications')->send($message);
+    }
+
+    /**
+     * Send a message to Email
+     *
+     * @return bool
+     */
+    public function sendMessageToEmail(Message $message, $user) {
+        $emailMessage = \Swift_Message::newInstance()
+            ->setSubject($message->getMySenderEmailSubject($this->container))
+            ->setFrom('send@example.com') // TODO: From switmailer configuration
+            ->setTo($user->getEmail())
+            ->setBody(
+                $message->getMySenderEmailBody($this->container),
+                'text/html'
+            )
+        ;
+
+        $this->container->get('mailer')->send($emailMessage);
+
+        return true;
     }
 }

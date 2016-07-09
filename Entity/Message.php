@@ -193,6 +193,41 @@ abstract class Message
     }
 
     /**
+     * Return false by default: so, message is not sent by email. You can override to true for send message by email.
+     *
+     * @return bool
+     */
+    public function getMySenderEmailHas($container) {
+        // by default: false
+        return false;
+    }
+
+    /**
+     * Subject for Email notification
+     *
+     * @param $container
+     * @return string
+     */
+    public function getMySenderEmailSubject($container) {
+        return "Default Subject";
+    }
+
+    /**
+     * By default it return: app/Resources/views/sopinetChatMessageEmail/[messagetype].html.twig render
+     * View for render email
+     *
+     * @param $container
+     * @return twig render
+     */
+    public function getMySenderEmailBody($container) {
+        return
+            $container->get('templating')->renderResponse(
+            ':sopinetChatMessageEmail:'.$this->getMyType().'html.twig',
+            $this
+        );
+    }
+
+    /**
      * Convert Message (DataBase) to MessageObject (for send)
      * @return MessageObject
      */
