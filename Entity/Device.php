@@ -23,6 +23,12 @@ class Device
     const TYPE_WEB = "Web";
 
     /**
+     * VirtualNone type is used for custom functionality about Devices and Messages.
+     * By example, you can to use it for check messages as notifications manually
+     */
+    const TYPE_VIRTUALNONE = "VirtualNone";
+
+    /**
      * @ORM\Id
      * @ORM\Column(name="id", type="string")
      * @ORM\GeneratedValue(strategy="NONE")

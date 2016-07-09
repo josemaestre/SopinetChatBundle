@@ -126,6 +126,7 @@ class MessageHelper {
                     $this->container->get('old_sound_rabbit_mq.send_message_package_producer')->publish(json_encode($msg));
                     // NO BACKGROUND
                 } else {
+                    // TODO: This part should be same that <SEARCH_DUPLICATE>
                     $response = $this->sendRealMessageToDevice($message, $device, $user);
                     if ($response) {
                         $messagePackage->setStatus(MessagePackage::STATUS_OK);
@@ -134,11 +135,15 @@ class MessageHelper {
                     }
                     if ($device->getDeviceType() == Device::TYPE_ANDROID) {
                         $messagePackage->setProcessed(true); // Yes, processed
-                    } elseif ($device->getDeviceType() == Device::TYPE_IOS) {
+                    } elseif (
+                        $device->getDeviceType() == Device::TYPE_IOS ||
+                        $device->getDeviceType() == Device::TYPE_VIRTUALNONE
+                    ) {
                         $messagePackage->setProcessed(false); // Not processed
                     }
                     $em->persist($messagePackage);
                     $em->flush();
+                    // TODO: End <SEARCH_DUPLICATE>
                 }
 
                 $sentCount++;
@@ -200,6 +205,9 @@ class MessageHelper {
             return $this->sendAPNMessage($messageArray, $text, $device->getDeviceId(), $message->getMyIOSContentAvailable(), $message->getMyIOSNotificationFields());
         } elseif ($device->getDeviceType() == Device::TYPE_WEB && $config['enabledWeb']) {
             return $this->sendWebMessage($messageArray, $text, $device->getDeviceId());
+        } elseif ($device->getDeviceType() == Device::TYPE_VIRTUALNONE) {
+            // Do Nothing, but return true, so, state = 1, it is "sent" (in virtualnone: saved)
+            return true;
         }
     }
 

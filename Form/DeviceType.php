@@ -46,7 +46,8 @@ class DeviceType extends AbstractType
                 'choices' => array(
                     Device::TYPE_ANDROID => "Android",
                     Device::TYPE_IOS => "iOS",
-					Device::TYPE_WEB => "Web"
+					Device::TYPE_WEB => "Web",
+                    Device::TYPE_VIRTUALNONE => "VirtualNone"
                 ),
             ))
         ;
