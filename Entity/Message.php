@@ -222,7 +222,7 @@ abstract class Message
     public function getMySenderEmailBody($container) {
         return
             $container->get('templating')->renderResponse(
-            ':sopinetChatMessageEmail:'.$this->getMyType().'html.twig',
+            ':sopinetChatMessageEmail:'.$this->getMyType().'.html.twig',
             array("message" => $this)
         );
     }
