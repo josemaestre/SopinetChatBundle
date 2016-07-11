@@ -223,7 +223,7 @@ abstract class Message
         return
             $container->get('templating')->renderResponse(
             ':sopinetChatMessageEmail:'.$this->getMyType().'html.twig',
-            $this
+            array("message" => $this)
         );
     }
 
