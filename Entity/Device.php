@@ -68,7 +68,7 @@ class Device
      * iOS
      * Android
      * Web
-     * @ORM\Column(name="type", type="string", columnDefinition="enum('iOS','Android','Web')")
+     * @ORM\Column(name="type", type="string", columnDefinition="enum('iOS','Android','Web','VirtualNone')")
      */
     protected $deviceType;
 
