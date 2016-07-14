@@ -7,6 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Entity\UserManager;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\SerializedName;
+use JMS\Serializer\Annotation\VirtualProperty;
 use JMS\Serializer\Annotation\Exclude;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\Request;
