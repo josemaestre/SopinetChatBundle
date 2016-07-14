@@ -10,6 +10,8 @@ use JMS\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation\Exclude;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * Entity Chat
@@ -20,10 +22,13 @@ use Symfony\Component\HttpFoundation\Request;
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="type", type="string")
  * @ORM\DiscriminatorMap({"chat" = "Chat"})
- *
+ * @Vich\Uploadable
  */
 class Chat
 {
+    const CHAT_CREATE = "chat_create";
+    const CHAT_LIST = "chat_list";
+
     use ORMBehaviors\Timestampable\Timestampable;
 
     /**
@@ -39,7 +44,7 @@ class Chat
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({"create"})
+     * @Groups({Chat::CHAT_CREATE, Chat::CHAT_LIST})
      */
     protected $id;
 
@@ -47,11 +52,13 @@ class Chat
      * @var string
      *
      * @ORM\Column(name="name", type="string")
+     * @Groups({Chat::CHAT_CREATE, Chat::CHAT_LIST})
      */
     protected $name;
 
     /**
      * @ORM\ManyToMany(targetEntity="\Sopinet\ChatBundle\Model\UserInterface", mappedBy="chats")
+     * @Groups({Chat::CHAT_CREATE, Chat::CHAT_LIST})
      */
     protected $chatMembers;
 
@@ -60,7 +67,7 @@ class Chat
      *
      * @ORM\ManyToOne(targetEntity="\Sopinet\ChatBundle\Model\UserInterface", inversedBy="chatsOwned", cascade={"persist"})
      * @ORM\JoinColumn(name="admin_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
-     * @Groups({"create"})
+     * @Groups({Chat::CHAT_CREATE, Chat::CHAT_LIST})
      */
     protected $admin;
 
@@ -73,8 +80,25 @@ class Chat
 
     /**
      * @ORM\Column(name="enabled", type="boolean", nullable=true, options={"default" = 1})
+     * @Groups({Chat::CHAT_CREATE, Chat::CHAT_LIST})
      */
     protected $enabled;
+
+    /**
+     * NOTE: This is not a mapped field of entity metadata, just a simple property.
+     *
+     * @Vich\UploadableField(mapping="group_photo", fileNameProperty="imageName")
+     *
+     * @var File
+     */
+    protected $groupPhoto;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @var string
+     */
+    protected $imageName;
 
     /**
      * Constructor
@@ -207,13 +231,17 @@ class Chat
     }
 
     /**
-     * Remove chatMembers
+     * Remove chatMember
      *
-     * @param $chatMembers
+     * @param $chatMember
      */
-    public function removeChatMember($chatMembers)
+    public function removeChatMember($chatMember)
     {
-        $this->chatMembers->removeElement($chatMembers);
+        if (!$this->chatMembers->contains($chatMember)) {
+            return;
+        }
+        $this->chatMembers->removeElement($chatMember);
+        $chatMember->removeChat($this);
     }
 
     /**
@@ -360,5 +388,71 @@ class Chat
     public function getEnabled()
     {
         return $this->enabled;
+    }
+
+    /**
+     * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
+     * of 'UploadedFile' is injected into this setter to trigger the  update. If this
+     * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
+     * must be able to accept an instance of 'File' as the bundle will inject one here
+     * during Doctrine hydration.
+     *
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $image
+     *
+     * @return Chat
+     */
+    public function setGroupPhoto(File $image = null)
+    {
+        $this->groupPhoto = $image;
+
+        if ($image) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updatedAt = new \DateTime('now');
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return File
+     */
+    public function getGroupPhoto()
+    {
+        return $this->groupPhoto;
+    }
+
+    /**
+     * @param string $imageName
+     *
+     * @return Chat
+     */
+    public function setImageName($imageName)
+    {
+        $this->imageName = $imageName;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImageName()
+    {
+        return $this->imageName;
+    }
+
+    /**
+     * @return string
+     * @Groups({Chat::CHAT_CREATE, Chat::CHAT_LIST})
+     * @SerializedName("photo")
+     * @VirtualProperty()
+     */
+    public function getPhotoPath()
+    {
+        if(!$this->imageName)
+            return null;
+        else
+            return 'images/chat/' . $this->imageName;
     }
 }
