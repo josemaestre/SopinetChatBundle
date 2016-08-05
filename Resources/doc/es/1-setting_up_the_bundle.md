@@ -48,7 +48,7 @@ fos_user:
 Si se está usando SonataUser: 
 
 ```
-    user_class: Application\Sonata\UserBundle\Entity\User)
+    user_class: Application\Sonata\UserBundle\Entity\User
 ```
 
 Añadir a security.yml
