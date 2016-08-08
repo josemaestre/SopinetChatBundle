@@ -145,7 +145,11 @@ trait UserChat
      */
     public function removeChat(\Sopinet\ChatBundle\Entity\Chat $chat)
     {
+        if (!$this->chats->contains($chat)) {
+            return;
+        }
         $this->chats->removeElement($chat);
+        $chat->removeChatMember($this);
     }
 
     /**

@@ -16,6 +16,10 @@ Más información: https://github.com/KnpLabs/DoctrineBehaviors
 
 Más información: https://github.com/richsage/RMSPushNotificationsBundle
 
+## VichUploaderBundle
+
+Más información: https://github.com/dustin10/VichUploaderBundle
+
 ## StofDoctrineExtensionsBundle
 
 Más información: https://github.com/stof/StofDoctrineExtensionsBundle

@@ -19,6 +19,7 @@ new Knp\DoctrineBehaviors\Bundle\DoctrineBehaviorsBundle(),
 new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
 new RMS\PushNotificationsBundle\RMSPushNotificationsBundle(),
 new Sopinet\ChatBundle\SopinetChatBundle(),
+new Vich\UploaderBundle\VichUploaderBundle(),
 ```
 
 ## Configuración de Bundles:
@@ -47,7 +48,7 @@ fos_user:
 Si se está usando SonataUser: 
 
 ```
-    user_class: Application\Sonata\UserBundle\Entity\User)
+    user_class: Application\Sonata\UserBundle\Entity\User
 ```
 
 Añadir a security.yml
@@ -82,6 +83,24 @@ rms_push_notifications:
         sandbox: %chat_apn_sandbox%
         pem: %chat_apn_pem%
         passphrase: %chat_apn_passpharase%
+```
+
+### VichUploaderBundle
+
+```
+vich_uploader:
+    db_driver: orm # or mongodb or propel or phpcr
+    mappings:
+        group_photo:
+            namer:              vich_uploader.namer_uniqid
+            uri_prefix:         /images/group
+            upload_destination: %kernel.root_dir%/../web/images/group
+```
+
+Crear la carpeta configurada en uri_prefix
+
+```
+mkdir -p web/images/group
 ```
 
 ## Configuración de SopinetChatBundle (opcional):

@@ -75,6 +75,12 @@ class ChatAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
+            ->add('groupPhoto', 'vich_image', array(
+                'label' => false,
+                'required' => false,
+                'allow_delete' => false,
+                'download_link' => true,
+            ))
             ->add('name')
             ->add('chatMembers', null, array(
                 'disabled' => false,

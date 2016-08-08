@@ -1,1 +1,13 @@
+<<<<<<< HEAD
 /nbproject/private/
+=======
+phpunit.xml
+Tests/autoload.php
+nbproject
+catalog.xml
+.idea
+composer.phar
+composer.lock
+vendor/*
+!vendor/vendors.php
+>>>>>>> c17ff010607510a4ac178d8fcc0189933bb38728
