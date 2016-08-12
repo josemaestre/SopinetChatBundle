@@ -11,6 +11,15 @@ use Sonata\AdminBundle\Show\ShowMapper;
 class UserStateAdmin extends Admin
 {
     /**
+     * Default Datagrid values
+     *
+     * @var array
+     */
+    protected $datagridValues = array(
+        '_sort_order' => 'DESC', // Descendant ordering (default = 'ASC')
+    );
+
+    /**
      * @param DatagridMapper $datagridMapper
      */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
