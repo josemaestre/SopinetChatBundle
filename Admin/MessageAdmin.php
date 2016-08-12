@@ -18,6 +18,7 @@ class MessageAdmin extends Admin
      * @var array
      */
     protected $datagridValues = array(
+        '_sort_by' => 'createdAt',
         '_sort_order' => 'DESC', // Descendant ordering (default = 'ASC')
     );
 
