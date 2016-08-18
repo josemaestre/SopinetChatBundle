@@ -10,6 +10,8 @@ class ChatRepository extends EntityRepository
      * para una serie de Usuarios pasados por parámetro
      * Si no existe devuelve null
      *
+     * TODO: Hará uso de getChatMembers, no de la función getMyDestinationUsers
+     *
      * @param $users
      *
      * @return Chat

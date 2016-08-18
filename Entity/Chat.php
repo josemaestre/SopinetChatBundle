@@ -248,14 +248,24 @@ class Chat
 
     /**
      * Get chatMembers
-     * 
-     * TODO: Chat needs another function like it, with other name: "getMyChatMembers". 
      *
      * @return \Doctrine\Common\Collections\Collection
      */
     public function getChatMembers()
     {
         return $this->chatMembers;
+    }
+
+    /**
+     * Return array of users for send Message
+     * This function may be override by another chat extends.
+     * So, you can send messages with dynamic logic.
+     *
+     * @param $container
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMyDestinationUsers($container) {
+        return $this->getChatMembers();
     }
 
     /**

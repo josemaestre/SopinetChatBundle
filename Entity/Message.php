@@ -288,7 +288,7 @@ abstract class Message
      */
     public function getMyDestionationUsers($container) {
         // by default: Get users
-        $users = $this->getChat()->getChatMembers();
+        $users = $this->getChat()->getMyDestinationUsers($container);
 
         return $users;
     }
