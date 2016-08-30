@@ -3,6 +3,10 @@
 namespace Sopinet\ChatBundle\Controller;
 
 use FOS\RestBundle\Controller\FOSRestController;
+use Sopinet\ChatBundle\Entity\Chat;
+use Sopinet\ChatBundle\Entity\Device;
+use Sopinet\ChatBundle\Entity\Message;
+use Sopinet\ChatBundle\Entity\MessagePackage;
 use Sopinet\ChatBundle\Entity\MessageText;
 use SopinetApiHelperBundle\Services\ApiHelper;
 use Sopinet\ChatBundle\Service\InterfaceHelper;
@@ -83,7 +87,7 @@ class ChatApiController extends FOSRestController{
             return $apiHelper->responseDenied($e->getMessage());
         }
 
-        return $apiHelper->responseOk($message, "create");
+        return $apiHelper->responseOk($message, Message::GROUP_CREATE);
     }
 
     /**
@@ -112,7 +116,7 @@ class ChatApiController extends FOSRestController{
             return $apiHelper->responseDenied($e->getMessage());
         }
 
-        return $apiHelper->responseOk($chat, "create");
+        return $apiHelper->responseOk($chat, Chat::GROUP_CREATE);
     }
 
     /**
@@ -140,7 +144,7 @@ class ChatApiController extends FOSRestController{
             return $apiHelper->responseDenied($e->getMessage());
         }
 
-        return $apiHelper->responseOk($device, "create");
+        return $apiHelper->responseOk($device, Device::GROUP_CREATE);
     }
 
     /**
@@ -197,7 +201,7 @@ class ChatApiController extends FOSRestController{
             return $apiHelper->responseDenied($e->getMessage());
         }
 
-        return $apiHelper->responseOk($messagePackage, "create");
+        return $apiHelper->responseOk($messagePackage, MessagePackage::GROUP_CREATE);
     }
 
     /**
@@ -227,6 +231,6 @@ class ChatApiController extends FOSRestController{
             return $apiHelper->responseDenied($e->getMessage());
         }
 
-        return $apiHelper->responseOk($chat, "clean");
+        return $apiHelper->responseOk($chat, Chat::GROUP_CLEAN);
     }
 }

@@ -16,6 +16,8 @@ use Doctrine\ORM\Event\OnFlushEventArgs;
  */
 class Device
 {
+    const GROUP_CREATE = "device_group_create";
+
     use ORMBehaviors\Timestampable\Timestampable;
 
     const TYPE_IOS = "iOS";
@@ -32,7 +34,7 @@ class Device
      * @ORM\Id
      * @ORM\Column(name="id", type="string")
      * @ORM\GeneratedValue(strategy="NONE")
-     * @Groups({"create"})
+     * @Groups({Device::GROUP_CREATE})
      *
      * DeviceToken from Device
      *
@@ -43,7 +45,7 @@ class Device
      * @var string
      *
      * @ORM\Column(name="deviceGCMId", type="string", nullable=true)
-     * @Groups({"create"})
+     * @Groups({Device::GROUP_CREATE})
      *
      */
     protected $deviceGCMId;

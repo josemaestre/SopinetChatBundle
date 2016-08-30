@@ -20,6 +20,10 @@ use Symfony\Component\DependencyInjection\Container;
  */
 class MessagePackage
 {
+    const GROUP_CREATE = "messagePackage_group_create";
+    const GROUP_EDIT = "messagePackage_group_edit";
+    const GROUP_LOGIN = "messagePackage_group_login";
+
     const STATUS_OK = 1;
     const STATUS_KO = -1;
     const STATUS_PENDING = 0;
@@ -32,7 +36,7 @@ class MessagePackage
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({"create", "edit", "login"})
+     * @Groups({MessagePackage::GROUP_CREATE, MessagePackage::GROUP_EDIT, MessagePackage::GROUP_LOGIN})
      */
     protected $id;
 

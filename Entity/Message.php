@@ -24,6 +24,8 @@ use Sopinet\ChatBundle\Model\MinimalPackage as MinimalPackage;
  */
 abstract class Message
 {
+    const GROUP_CREATE = "message_group_create";
+
     use MinimalPackage;
     use ORMBehaviors\Timestampable\Timestampable;
 
@@ -32,7 +34,7 @@ abstract class Message
      *
      * @ORM\Column(name="id", type="string")
      * @ORM\GeneratedValue(strategy="NONE")
-     * @Groups({"create"})
+     * @Groups({Message::GROUP_CREATE})
      * @ORM\Id
      *
      * Este ID será único, formado por un md5 de: Secret + messageIdLocal + deviceId

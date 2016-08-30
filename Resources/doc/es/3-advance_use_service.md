@@ -47,7 +47,7 @@ class MyCustomApiChatController extends FOSRestController
             return $apiHelper->responseDenied($e->getMessage());
         }
 
-        return $apiHelper->responseOk($message, "create");        
+        return $apiHelper->responseOk($message, Message::GROUP_CREATE);        
     }
 }
 ```

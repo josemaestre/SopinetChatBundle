@@ -28,8 +28,12 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  */
 class Chat
 {
-    const CHAT_CREATE = "chat_create";
-    const CHAT_LIST = "chat_list";
+    const CHAT_CREATE = "chat_group_create"; // DEPRECATED, No use it, use GROUP_CREATE!
+    const CHAT_LIST = "chat_group_list"; // DEPRECATED, No use it, use GROUP_CREATE!
+
+    const GROUP_CREATE = "chat_group_create";
+    const GROUP_LIST = "chat_group_list";
+    const GROUP_CLEAN = "chat_group_clean";
 
     use ORMBehaviors\Timestampable\Timestampable;
 
@@ -46,7 +50,7 @@ class Chat
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({Chat::CHAT_CREATE, Chat::CHAT_LIST})
+     * @Groups({Chat::GROUP_CREATE, Chat::GROUP_LIST})
      */
     protected $id;
 
@@ -54,13 +58,13 @@ class Chat
      * @var string
      *
      * @ORM\Column(name="name", type="string")
-     * @Groups({Chat::CHAT_CREATE, Chat::CHAT_LIST})
+     * @Groups({Chat::GROUP_CREATE, Chat::GROUP_LIST})
      */
     protected $name;
 
     /**
      * @ORM\ManyToMany(targetEntity="\Sopinet\ChatBundle\Model\UserInterface", mappedBy="chats")
-     * @Groups({Chat::CHAT_CREATE, Chat::CHAT_LIST})
+     * @Groups({Chat::GROUP_CREATE, Chat::GROUP_LIST})
      */
     protected $chatMembers;
 
@@ -69,7 +73,7 @@ class Chat
      *
      * @ORM\ManyToOne(targetEntity="\Sopinet\ChatBundle\Model\UserInterface", inversedBy="chatsOwned", cascade={"persist"})
      * @ORM\JoinColumn(name="admin_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
-     * @Groups({Chat::CHAT_CREATE, Chat::CHAT_LIST})
+     * @Groups({Chat::GROUP_CREATE, Chat::GROUP_LIST})
      */
     protected $admin;
 
@@ -82,7 +86,7 @@ class Chat
 
     /**
      * @ORM\Column(name="enabled", type="boolean", nullable=true, options={"default" = 1})
-     * @Groups({Chat::CHAT_CREATE, Chat::CHAT_LIST})
+     * @Groups({Chat::GROUP_CREATE, Chat::GROUP_LIST})
      */
     protected $enabled;
 

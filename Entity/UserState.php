@@ -18,6 +18,8 @@ class UserState
     const STATE_CONNECTED = 1;
     const STATE_DISCONNECTED = 0;
 
+    const GROUP_CREATE = "userState_group_create";
+
     use ORMBehaviors\Timestampable\Timestampable;
 
     /**
@@ -26,7 +28,7 @@ class UserState
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({"create"})
+     * @Groups({UserState::GROUP_CREATE})
      */
     protected $id;
 
