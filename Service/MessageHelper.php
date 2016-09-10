@@ -321,9 +321,10 @@ class MessageHelper {
      * @return bool
      */
     public function sendMessageToEmail(Message $message, $user) {
+        $mailer_user = $this->container->getParameter('mailer_user');
         $emailMessage = \Swift_Message::newInstance()
             ->setSubject($message->getMySenderEmailSubject($this->container))
-            ->setFrom('send@example.com') // TODO: From switmailer configuration
+            ->setFrom($mailer_user)
             ->setTo($user->getEmail())
             ->setBody(
                 $message->getMySenderEmailBody($this->container),
