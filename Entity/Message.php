@@ -219,13 +219,17 @@ abstract class Message
      * View for render email
      *
      * @param $container
+     * @param $toUser - Usuario al que se envía el email
      * @return twig render
      */
-    public function getMySenderEmailBody($container) {
+    public function getMySenderEmailBody($container, $toUser) {
         return
             $container->get('templating')->render(
             ':sopinetChatMessageEmail:'.$this->getMyType().'.html.twig',
-            array("message" => $this)
+            array(
+                "message" => $this,
+                "toUser" => $toUser
+            )
         );
     }
 

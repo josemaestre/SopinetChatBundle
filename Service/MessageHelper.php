@@ -327,7 +327,7 @@ class MessageHelper {
             ->setFrom($mailer_user)
             ->setTo($user->getEmail())
             ->setBody(
-                $message->getMySenderEmailBody($this->container),
+                $message->getMySenderEmailBody($this->container, $user),
                 'text/html'
             )
         ;
