@@ -41,10 +41,13 @@ class ChatRepository extends EntityRepository
      * @return bool
      */
     private function usersInChat($users, Chat $chat) {
-        if (count($users) == 0) return false;
+        if (count($users) == 0 || count($users) != count($chat->getChatMembers()))
+            return false;
+
         foreach($users as $user) {
             if (!$this->userInChat($user, $chat)) return false;
         }
+
         return true;
     }
 
