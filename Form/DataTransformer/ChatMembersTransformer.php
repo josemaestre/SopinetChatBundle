@@ -34,7 +34,7 @@ class ChatMembersTransformer implements DataTransformerInterface
 
     public function reverseTransform($chatMembersArrayString)
     {
-        $uIDArray = explode(',',$chatMembersArrayString);
+        $uIDArray = array_unique(explode(',', $chatMembersArrayString));
         $userManager = $this->container->get('fos_user.user_manager');
 
         $uObjectArray = array();
