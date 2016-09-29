@@ -18,7 +18,7 @@ trait UserGCM
     }
 
     /**
-     * @ORM\OneToMany(targetEntity="\Sopinet\ChatBundle\Entity\MessagePackage", mappedBy="fromUser", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="\Sopinet\ChatBundle\Entity\MessagePackage", mappedBy="toUser", cascade={"remove"})
      */
     protected $messagesPackageReceived;
 
