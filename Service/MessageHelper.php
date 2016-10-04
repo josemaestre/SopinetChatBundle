@@ -323,7 +323,7 @@ class MessageHelper {
     public function sendMessageToEmail(Message $message, $user) {
         $mailer_user = $this->container->getParameter('mailer_user');
         $emailMessage = \Swift_Message::newInstance()
-            ->setSubject($message->getMySenderEmailSubject($this->container))
+            ->setSubject($message->getMySenderEmailSubject($this->container, $user))
             ->setFrom($mailer_user)
             ->setTo($user->getEmail())
             ->setBody(
@@ -331,6 +331,17 @@ class MessageHelper {
                 'text/html'
             )
         ;
+
+        $senderAttach = $message->getMySenderEmailAttach($this->container, $user);
+        if ($senderAttach != null) {
+            if (is_array($senderAttach)) {
+                foreach($senderAttach as $attach) {
+                    $emailMessage->attach(\Swift_Attachment::fromPath($attach));
+                }
+            } else {
+                $emailMessage->attach(\Swift_Attachment::fromPath($senderAttach));
+            }
+        }
 
         $this->container->get('mailer')->send($emailMessage);
 

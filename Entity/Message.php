@@ -205,12 +205,25 @@ abstract class Message
     }
 
     /**
+     * Return null by default.
+     * You can return array of string file routes in disk for send in email
+     *
+     * @param $container
+     * @param $toUser - Usuario al que se envía el email
+     * @return null|string|array
+     */
+    public function getMySenderEmailAttach($container, $toUser) {
+        return null;
+    }
+
+    /**
      * Subject for Email notification
      *
      * @param $container
+     * @param $toUser - Usuario al que se envía el email
      * @return string
      */
-    public function getMySenderEmailSubject($container) {
+    public function getMySenderEmailSubject($container, $toUser) {
         return "Default Subject";
     }
 
