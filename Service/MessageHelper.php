@@ -105,58 +105,65 @@ class MessageHelper {
         $sentCount = 0;
         $em = $this->container->get('doctrine.orm.default_entity_manager');
 
-        if ($user == null || !is_object($user)) {
+        if ($user == null) {
             return 0;
         }
 
-        /** @var Device $device */
-        foreach($user->getDevices() as $device) {
-            if (($message->getFromDevice() == null || $message->getFromDevice()->getDeviceId() != $device->getDeviceId()) && $device->getState() == '1') {
-                // DEPRECATED! Next code is deprecated, now i pass message object for better iOS options
-                //$messageObject = $message->getMyMessageObject($this->container);
-                //$text = $message;
+        if (is_string($user)) {
+            if ($message->getMySenderEmailHas($this->container)) {
+                $this->sendMessageToEmail($message, $user);
+            }
+        } else {
+            /** @var Device $device */
+            foreach($user->getDevices() as $device) {
+                if (($message->getFromDevice() == null || $message->getFromDevice()->getDeviceId() != $device->getDeviceId()) && $device->getState() == '1') {
+                    // DEPRECATED! Next code is deprecated, now i pass message object for better iOS options
+                    //$messageObject = $message->getMyMessageObject($this->container);
+                    //$text = $message;
 
-                $messagePackage = new MessagePackage();
-                $messagePackage->setMessage($message);
-                $messagePackage->setToDevice($device);
-                $messagePackage->setToUser($user);
-                $messagePackage->setStatus(MessagePackage::STATUS_PENDING);
-                $em->persist($messagePackage);
-                $em->flush();
-
-                // DO IN BACKGROUND
-                if ($config['background'] && $this->container->get('kernel')->getEnvironment() != 'test') {
-                    $msg = array('messagePackageId' => $messagePackage->getId());
-                    $this->container->get('old_sound_rabbit_mq.send_message_package_producer')->setContentType('application/json');
-                    $this->container->get('old_sound_rabbit_mq.send_message_package_producer')->publish(json_encode($msg));
-                    // NO BACKGROUND
-                } else {
-                    // TODO: This part should be same that <SEARCH_DUPLICATE>
-                    $response = $this->sendRealMessageToDevice($message, $device, $user);
-                    if ($response) {
-                        $messagePackage->setStatus(MessagePackage::STATUS_OK);
-                        if ($message->getMySenderEmailHas($this->container)) {
-                            $this->sendMessageToEmail($message, $user);
-                        }
-                    } else {
-                        $messagePackage->setStatus(MessagePackage::STATUS_KO);
-                    }
-                    if ($device->getDeviceType() == Device::TYPE_ANDROID) {
-                        $messagePackage->setProcessed(true); // Yes, processed
-                    } elseif (
-                        $device->getDeviceType() == Device::TYPE_IOS ||
-                        $device->getDeviceType() == Device::TYPE_VIRTUALNONE
-                    ) {
-                        $messagePackage->setProcessed(false); // Not processed
-                    }
+                    $messagePackage = new MessagePackage();
+                    $messagePackage->setMessage($message);
+                    $messagePackage->setToDevice($device);
+                    $messagePackage->setToUser($user);
+                    $messagePackage->setStatus(MessagePackage::STATUS_PENDING);
                     $em->persist($messagePackage);
                     $em->flush();
-                    // TODO: End <SEARCH_DUPLICATE>
-                }
 
-                $sentCount++;
+                    // DO IN BACKGROUND
+                    if ($config['background'] && $this->container->get('kernel')->getEnvironment() != 'test') {
+                        $msg = array('messagePackageId' => $messagePackage->getId());
+                        $this->container->get('old_sound_rabbit_mq.send_message_package_producer')->setContentType('application/json');
+                        $this->container->get('old_sound_rabbit_mq.send_message_package_producer')->publish(json_encode($msg));
+                        // NO BACKGROUND
+                    } else {
+                        // TODO: This part should be same that <SEARCH_DUPLICATE>
+                        $response = $this->sendRealMessageToDevice($message, $device, $user);
+                        if ($response) {
+                            $messagePackage->setStatus(MessagePackage::STATUS_OK);
+                            if ($message->getMySenderEmailHas($this->container)) {
+                                $this->sendMessageToEmail($message, $user);
+                            }
+                        } else {
+                            $messagePackage->setStatus(MessagePackage::STATUS_KO);
+                        }
+                        if ($device->getDeviceType() == Device::TYPE_ANDROID) {
+                            $messagePackage->setProcessed(true); // Yes, processed
+                        } elseif (
+                            $device->getDeviceType() == Device::TYPE_IOS ||
+                            $device->getDeviceType() == Device::TYPE_VIRTUALNONE
+                        ) {
+                            $messagePackage->setProcessed(false); // Not processed
+                        }
+                        $em->persist($messagePackage);
+                        $em->flush();
+                        // TODO: End <SEARCH_DUPLICATE>
+                    }
+
+                    $sentCount++;
+                }
             }
         }
+
         return $sentCount;
     }
 
