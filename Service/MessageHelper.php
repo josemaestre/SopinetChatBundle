@@ -104,6 +104,11 @@ class MessageHelper {
 
         $sentCount = 0;
         $em = $this->container->get('doctrine.orm.default_entity_manager');
+
+        if ($user == null || !is_object($user)) {
+            return 0;
+        }
+
         /** @var Device $device */
         foreach($user->getDevices() as $device) {
             if (($message->getFromDevice() == null || $message->getFromDevice()->getDeviceId() != $device->getDeviceId()) && $device->getState() == '1') {
