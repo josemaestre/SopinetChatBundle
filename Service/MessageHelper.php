@@ -255,8 +255,8 @@ class MessageHelper {
         $message->setData($mes);
         $message->setDeviceIdentifier($to);
         $message->setGCM(true);
-        $logger = $this->container->get('logger');
-        $logger->emerg(implode(',', $message->getData()));
+//        $logger = $this->container->get('logger');
+//        $logger->emerg(implode(',', $message->getData()));
         try {
             $response = $this->container->get('rms_push_notifications')->send($message);
         } catch (InvalidMessageTypeException $e) {
@@ -286,8 +286,8 @@ class MessageHelper {
             throw $e;
         }
         $alert=[];
-        $logger = $this->container->get('logger');
-        $logger->emerg(implode(',', $mes));
+//        $logger = $this->container->get('logger');
+//        $logger->emerg(implode(',', $mes));
 
         // - $em = $this->container->get("doctrine.orm.entity_manager");
         // - $reDevice = $em->getRepository('ApplicationSopinetUserBundle:User');
