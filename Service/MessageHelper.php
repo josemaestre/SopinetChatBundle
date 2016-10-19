@@ -333,11 +333,17 @@ class MessageHelper {
      * @return bool
      */
     public function sendMessageToEmail(Message $message, $user) {
+        if (is_object($user)) {
+            $toEmail = $user->getEmail();
+        } else {
+            $toEmail = $user;
+        }
+
         $mailer_user = $this->container->getParameter('mailer_user');
         $emailMessage = \Swift_Message::newInstance()
             ->setSubject($message->getMySenderEmailSubject($this->container, $user))
             ->setFrom($mailer_user)
-            ->setTo($user->getEmail())
+            ->setTo($toEmail)
             ->setBody(
                 $message->getMySenderEmailBody($this->container, $user),
                 'text/html'
