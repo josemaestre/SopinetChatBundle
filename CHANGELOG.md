@@ -1,7 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 2016-11-24
+
+### Changed
+
+- Now, sender email is trying to be sent from mailer_email parameter
+
 ## 2016-10-13
+
 ### Fixed
 
 - If you use so parameter User = null, it dont crash,

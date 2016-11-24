@@ -339,10 +339,16 @@ class MessageHelper {
             $toEmail = $user;
         }
 
-        $mailer_user = $this->container->getParameter('mailer_user');
+        if ($this->container->hasParameter('mailer_email')) {
+            $mailer_email = $this->container->getParameter('mailer_email');
+        } else if ($this->container->hasParameter('mailer_user')) {
+            $mailer_email = $this->container->getParameter('mailer_user');
+        } else {
+            $mailer_email = "define@youremail.com";
+        }
         $emailMessage = \Swift_Message::newInstance()
             ->setSubject($message->getMySenderEmailSubject($this->container, $user))
-            ->setFrom($mailer_user)
+            ->setFrom($mailer_email)
             ->setTo($toEmail)
             ->setBody(
                 $message->getMySenderEmailBody($this->container, $user),
