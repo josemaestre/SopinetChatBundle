@@ -302,17 +302,6 @@ class MessageHelper {
         /** @var $user */
         // $user=$reDevice->findOneByPhone($mes['phone']);
         if ($contentAvailable) {
-            /**
-            if ($mes['chattype']=='event') {
-            $em = $this->container->get("doctrine.orm.entity_manager");
-            $reChat = $em->getRepository('PetyCashAppBundle:Chat');
-            $chat = $reChat->find($mes['chatid']);
-            $text = $chat->getName().'@'.$user->getUserName();
-            } else {
-            $text = $user->getUserName();
-            }
-             **/
-
             //nombredelChat@nombredeUsuario;
             $messageString = $notificationFields;
             $alert['loc-args'] = array($messageString, $text);
@@ -320,6 +309,7 @@ class MessageHelper {
             $message->setMessage($alert);
             $config = $this->container->getParameter('sopinet_chat.config');
             $message->setAPSSound($config['soundIOS']);
+            $message->apsBody["aps"]["badge"] = "increment";
 
         }
         $message->setDeviceIdentifier($to);
