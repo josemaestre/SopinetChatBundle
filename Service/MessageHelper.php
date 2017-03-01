@@ -177,6 +177,8 @@ class MessageHelper {
      */
     public function sendRealMessageToDevice(Message $message, Device $device, $user = null, Request $request = null, $printOut = false)
     {
+        $em = $this->container->get('doctrine')->getManager();
+
         $config = $this->container->getParameter('sopinet_chat.config');
 
         $messageData = $message->getMyMessageObject($this->container, $request);
@@ -207,6 +209,21 @@ class MessageHelper {
 
         if ($user != null) {
             $messageArray['toUserId'] = $user->getId();
+
+            //Calculamos el numero de mensajes pendientes que tiene
+
+            // Get MessagePackage
+            $reMessagePackage = $em->getRepository("SopinetChatBundle:MessagePackage");
+            $messagesPackage = $reMessagePackage->findBy(array(
+                'toUser' => $user->getId(),
+                'toDevice' => $device->getDeviceId(),
+                'processed' => false
+            ));
+
+            //Añadimos uno para que cuente el actual mensaje
+            $messageArray['badge'] = count($messagesPackage) + 1;
+        }else{
+            $messageArray['badge'] = 0;
         }
 
         if ($printOut) {
@@ -309,7 +326,9 @@ class MessageHelper {
             $message->setMessage($alert);
             $config = $this->container->getParameter('sopinet_chat.config');
             $message->setAPSSound($config['soundIOS']);
-            $message->apsBody["aps"]["badge"] = "increment";
+
+
+            $message->setAPSBadge( $mes['badge'] );
 
         }
         $message->setDeviceIdentifier($to);
