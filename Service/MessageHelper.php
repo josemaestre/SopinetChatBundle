@@ -319,10 +319,18 @@ class MessageHelper {
         /** @var $user */
         // $user=$reDevice->findOneByPhone($mes['phone']);
         if ($contentAvailable) {
+
+            if(is_array($notificationFields)){
+                $notificationFields[] = $text;
+                $alert['loc-args'] = $notificationFields;
+            }else{
+                $messageString = $notificationFields;
+                $alert['loc-args'] = array($messageString, $text);
+            }
+
             //nombredelChat@nombredeUsuario;
-            $messageString = $notificationFields;
-            $alert['loc-args'] = array($messageString, $text);
-            $alert['loc-key']=$mes['type'];
+
+            $alert['loc-key'] = $mes['type'];
             $message->setMessage($alert);
             $config = $this->container->getParameter('sopinet_chat.config');
             $message->setAPSSound($config['soundIOS']);
