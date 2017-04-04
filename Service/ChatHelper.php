@@ -2,9 +2,12 @@
 
 namespace Sopinet\ChatBundle\Service;
 
+use AppBundle\Services\LoginHelper;
 use Sopinet\ChatBundle\Entity\Chat;
+use Sopinet\ChatBundle\Entity\ChatRepository;
 use Symfony\Component\DependencyInjection\Container;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Acl\Exception\Exception;
 
 /**
@@ -116,5 +119,40 @@ class ChatHelper
         }
 
         return $chatExist;
+    }
+
+    /**
+     * Funcion para obtener mis chats
+     * @param Request $request
+     * @return array
+     */
+    public function getMyChats(Request $request){
+        
+        /** @var LoginHelper $loginHelper */
+        $loginHelper = $this->container->get('sopinet_login_helper');
+        try {
+            $user = $loginHelper->getUser($request);
+        } catch(Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+
+        $em = $this->container->get('doctrine.orm.default_entity_manager');
+
+        /** @var ChatRepository $reChat */
+        $reChat = $em->getRepository('SopinetChatBundle:Chat');
+
+        $all = $reChat->findAll();
+
+        $chats = array();
+
+        /** @var Chat $chat */
+        foreach ($all as $chat){
+
+            if($chat->getChatMembers()->contains($user)){
+                $chats [] = $chat;
+            }
+        }
+
+        return $chats;
     }
 }
