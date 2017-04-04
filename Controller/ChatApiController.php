@@ -233,4 +233,30 @@ class ChatApiController extends FOSRestController{
 
         return $apiHelper->responseOk($chat, Chat::GROUP_CLEAN);
     }
+    
+    /**
+     *
+     * @ApiDoc(
+     *   description="Funcion para obtener nuestros chats.",
+     *   section="SopinetChat",
+     *   parameters={
+     *      {"name"="email", "dataType"="string", "required"=false, "description"="Correo electrónico del usuario."},
+     *      {"name"="password", "dataType"="string", "required"=false, "description"="Contraseña del usuario (en texto plano sin codificar)."},
+     *   }
+     * )
+     *
+     * @Post("chats")
+     */
+    public function chatsAction(Request $request) {
+
+        /** @var ApiHelper $apiHelper */
+        $apiHelper = $this->get('sopinet_apihelperbundle_apihelper');
+
+        /** @var ChatHelper $chatHelper */
+        $chatHelper = $this->get('sopinet_chatbundle_chathelper');
+
+        $chats = $chatHelper->getMyChats($request);
+
+        return $apiHelper->responseOk($chats, Chat::GROUP_CREATE);
+    }
 }
