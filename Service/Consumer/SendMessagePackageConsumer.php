@@ -60,12 +60,6 @@ class SendMessagePackageConsumer implements ConsumerInterface
         $logger->error('Guardado correctamente 2: ' . $messagePackageId);
 
         // TODO: This part should be same that <SEARCH_DUPLICATE>
-        $response = $messageHelper->sendRealMessageToDevice($messagePackage->getMessage(), $messagePackage->getToDevice(), $messagePackage->getToUser(), $this->request, true);
-        if ($response) {
-            $messagePackage->setStatus(MessagePackage::STATUS_OK);
-        } else {
-            $messagePackage->setStatus(MessagePackage::STATUS_KO);
-        }
         if ($messagePackage->getToDevice()->getDeviceType() == Device::TYPE_ANDROID) {
             $messagePackage->setProcessed(true); // Yes, processed
         } elseif (
@@ -76,6 +70,16 @@ class SendMessagePackageConsumer implements ConsumerInterface
         }
         $em->persist($messagePackage);
         $em->flush();
+        
+        $response = $messageHelper->sendRealMessageToDevice($messagePackage->getMessage(), $messagePackage->getToDevice(), $messagePackage->getToUser(), $this->request, true);
+        if ($response) {
+            $messagePackage->setStatus(MessagePackage::STATUS_OK);
+        } else {
+            $messagePackage->setStatus(MessagePackage::STATUS_KO);
+        }
+        $em->persist($messagePackage);
+        $em->flush();
+        
         // TODO: End <SEARCH_DUPLICATE>
 
         return true;
