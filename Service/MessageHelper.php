@@ -341,7 +341,14 @@ class MessageHelper {
         }
         $message->setDeviceIdentifier($to);
         $message->setAPSContentAvailable($contentAvailable);
-        return $this->container->get('rms_push_notifications')->send($message);
+
+        try {
+            $response = $this->container->get('rms_push_notifications')->send($message);
+        } catch (\RuntimeException $e) {
+            throw $e;
+        }
+
+        return $response;
     }
 
     /**

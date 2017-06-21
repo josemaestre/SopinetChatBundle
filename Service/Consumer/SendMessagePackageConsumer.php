@@ -70,11 +70,16 @@ class SendMessagePackageConsumer implements ConsumerInterface
         }
         $em->persist($messagePackage);
         $em->flush();
-        
-        $response = $messageHelper->sendRealMessageToDevice($messagePackage->getMessage(), $messagePackage->getToDevice(), $messagePackage->getToUser(), $this->request, true);
+
+        try {
+            $response = $messageHelper->sendRealMessageToDevice($messagePackage->getMessage(), $messagePackage->getToDevice(), $messagePackage->getToUser(), $this->request, true);
+        } catch(\Exception $e) {
+            throw $e;
+        }
         if ($response) {
             $messagePackage->setStatus(MessagePackage::STATUS_OK);
         } else {
+            $logger->critical($response->getData());
             $messagePackage->setStatus(MessagePackage::STATUS_KO);
         }
         $em->persist($messagePackage);
