@@ -175,7 +175,7 @@ class MessageHelper {
      * @param String $to
      *
      */
-    public function sendRealMessageToDevice(Message $message, Device $device, $user = null, Request $request = null, $printOut = false)
+    public function sendRealMessageToDevice(Message $message, Device $device, $user = null, Request $request = null)
     {
         $em = $this->container->get('doctrine')->getManager();
 
@@ -224,11 +224,6 @@ class MessageHelper {
             $messageArray['badge'] = count($messagesPackage) + 1;
         }else{
             $messageArray['badge'] = 0;
-        }
-
-        if ($printOut) {
-            ld($messageArray);
-            //echo "Array Data Message: " . serialize($messageArray);
         }
 
         if ($device->getDeviceType() == Device::TYPE_ANDROID && $config['enabledAndroid']) {
