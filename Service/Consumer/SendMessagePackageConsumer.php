@@ -75,6 +75,7 @@ class SendMessagePackageConsumer implements ConsumerInterface
         if ($response) {
             $messagePackage->setStatus(MessagePackage::STATUS_OK);
         } else {
+            $logger->critical($response->getData());
             $messagePackage->setStatus(MessagePackage::STATUS_KO);
         }
         $em->persist($messagePackage);
