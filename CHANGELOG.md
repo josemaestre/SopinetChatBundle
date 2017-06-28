@@ -1,6 +1,19 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 2017-06-28
+
+### Changed
+
+- Added parameter "disabled". It disable all features in SopinetChatBundle.
+You can use it in dev enviorement.
+
+## 2017-06-21
+
+### Changed
+
+- Upgrade RMS Push Notifications bundle
+
 ## 2016-11-24
 
 ### Changed
