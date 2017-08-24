@@ -47,6 +47,7 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
                 ->children()
+                    ->booleanNode('disabled')->defaultFalse()->end()
                     ->booleanNode('anyType')->defaultFalse()->end()
                     ->booleanNode('enabledAndroid')->defaultTrue()->end()
                     ->booleanNode('enabledIOS')->defaultTrue()->end()

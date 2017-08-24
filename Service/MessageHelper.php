@@ -23,6 +23,15 @@ class MessageHelper {
         $this->container = $container;
     }
 
+    private function isDisabled() {
+        $config = $this->container->getParameter('sopinet_chat.config');
+        if (isset($config['disabled']) && $config['disabled']) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     /**
      * Get Message class String from $type
      *
@@ -89,6 +98,10 @@ class MessageHelper {
      * @return integer: -1 si hay error, 0 si no hay dispositivos a los que mandar, y más de 0 indicando el número de mensajes enviados
      */
     public function sendMessage(Message $message) {
+        if ($this->isDisabled()) {
+            return false;
+        }
+
         $users = $message->getMyDestionationUsers($this->container);
         $sentCount = 0;
         foreach($users as $user) {
@@ -100,6 +113,10 @@ class MessageHelper {
     }
 
     public function sendMessageToUser(Message $message, $user) {
+        if ($this->isDisabled()) {
+            return false;
+        }
+
         $config = $this->container->getParameter('sopinet_chat.config');
 
         $sentCount = 0;
@@ -177,6 +194,10 @@ class MessageHelper {
      */
     public function sendRealMessageToDevice(Message $message, Device $device, $user = null, Request $request = null)
     {
+        if ($this->isDisabled()) {
+            return false;
+        }
+
         $em = $this->container->get('doctrine')->getManager();
 
         $config = $this->container->getParameter('sopinet_chat.config');
