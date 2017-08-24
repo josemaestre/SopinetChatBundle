@@ -1,6 +1,13 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+
+## 1.2
+
+### Changed
+
+- Optimization for method getChatExist from ChatRepository
+
 ## 2017-06-28
 
 ### Changed
