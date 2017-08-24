@@ -10,8 +10,6 @@ class ChatRepository extends EntityRepository
      * para una serie de Usuarios pasados por parámetro
      * Si no existe devuelve null
      *
-     * TODO: Hará uso de getChatMembers, no de la función getMyDestinationUsers
-     *
      * @param $users
      *
      * @return Chat
@@ -20,14 +18,20 @@ class ChatRepository extends EntityRepository
     {
         $em = $this->getEntityManager();
         $repositoryChat = $em->getRepository('SopinetChatBundle:Chat');
-        $chats=$repositoryChat->findAll();
+        $qb=$repositoryChat->createQueryBuilder('chat');
+        $chats=$qb
+            ->join('chat.chatMembers',
+                'user',
+                'WITH',
+                $qb->expr()->in('user.id', array_map(function($user){return $user->getId();},$users)))
+            ->getQuery()->execute();
         /** @var Chat $chat */
         foreach ($chats as $chat) {
-            if ($this->usersInChat($users, $chat)) {
+            if ($this->usersInChat($users, $chat))
+            {
                 return $chat;
             }
         }
-
         return null;
     }
 
@@ -41,15 +45,14 @@ class ChatRepository extends EntityRepository
      * @return bool
      */
     private function usersInChat($users, Chat $chat) {
-        if (count($users) == 0 || count($users) != count($chat->getChatMembers()))
-            return false;
-
-        foreach($users as $user) {
-            if (!$this->userInChat($user, $chat)) return false;
-        }
-
-        return true;
+        $chatMembers=$chat->getChatMembers();
+        $chatMembers->initialize();
+        return $chatMembers->count() == count($users)
+            && $chatMembers->forAll(function($index, $user) use ($users){
+                return in_array($user, $users);
+            });
     }
+
 
     /**
      * Comprueba si un usuario esta dentro de un chat
