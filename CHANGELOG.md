@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 1.3
+
+### Changed
+
+- Optimization for method execute from SendMessagePackageConsumer
+- Removed double persist
 
 ## 1.2
 

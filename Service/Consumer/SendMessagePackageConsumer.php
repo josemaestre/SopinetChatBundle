@@ -55,8 +55,7 @@ class SendMessagePackageConsumer implements ConsumerInterface
         if ($messagePackage == null || $messagePackage->getMessage() == null) {
             return false;
         }
-        //Se cambio ya que a partir de iOS 10 se pueden procesar con seguridad
-        $messagePackage->setProcessed(true);
+        $messagePackage->setProcessed($messagePackage->getToDevice()->getDeviceType() == Device::TYPE_ANDROID);
         try {
             $response = $messageHelper->sendRealMessageToDevice($messagePackage->getMessage(), $messagePackage->getToDevice(), $messagePackage->getToUser(), $this->request, true);
         } catch(\Exception $e) {
