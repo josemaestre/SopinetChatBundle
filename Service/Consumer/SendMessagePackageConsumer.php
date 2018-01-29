@@ -78,6 +78,9 @@ class SendMessagePackageConsumer implements ConsumerInterface
         }
         if ($response) {
             $messagePackage->setStatus(MessagePackage::STATUS_OK);
+            if ($messagePackage->getMessage()->getMySenderEmailHas($this->container)) {
+                $messageHelper->sendMessageToEmail($messagePackage->getMessage(), $messagePackage->getToUser());
+            }
         } else {
             try {
                 $messagePackage->setStatus(MessagePackage::STATUS_KO);
@@ -85,6 +88,7 @@ class SendMessagePackageConsumer implements ConsumerInterface
                 $logger->error($e);
             }
         }
+
         $em->persist($messagePackage);
         $em->flush();
         
