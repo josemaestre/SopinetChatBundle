@@ -4,7 +4,6 @@
   "keywords": ["chat", "notification","gcm", "apns", "symfony2", "bundle", "sopinet"],
   "type": "symfony-bundle",
   "minimum-stability": "dev",
-  "license": "GPL2",
   "authors": [
     {
       "name": "Alejandro Arrabal",
