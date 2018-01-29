@@ -74,9 +74,13 @@ class SendMessagePackageConsumer implements ConsumerInterface
         $response = $messageHelper->sendRealMessageToDevice($messagePackage->getMessage(), $messagePackage->getToDevice(), $messagePackage->getToUser(), $this->request, true);
         if ($response) {
             $messagePackage->setStatus(MessagePackage::STATUS_OK);
+            if ($messagePackage->getMessage()->getMySenderEmailHas($this->container)) {
+                $messageHelper->sendMessageToEmail($messagePackage->getMessage(), $messagePackage->getToUser());
+            }
         } else {
             $messagePackage->setStatus(MessagePackage::STATUS_KO);
         }
+
         $em->persist($messagePackage);
         $em->flush();
         
