@@ -6,6 +6,6 @@ namespace Sopinet\ChatBundle\Model;
 # You should configure it in your config.yml
 
 interface UserInterface {
-    
+
 }
 ?>

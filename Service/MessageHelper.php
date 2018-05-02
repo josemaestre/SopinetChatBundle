@@ -146,8 +146,19 @@ class MessageHelper {
                     $em->persist($messagePackage);
                     $em->flush();
 
+                    // Is Background?
+                    if ($message->getMyBackground() == Message::BACKGROUND_BYDEFAULT) {
+                        $background = $config['background'];
+                    } else {
+                        if ($message->getMyBackground() == Message::BACKGROUND_FORCETRUE) {
+                            $background = true;
+                        } else {
+                            $background = false;
+                        }
+                    }
+
                     // DO IN BACKGROUND
-                    if ($config['background'] && $this->container->get('kernel')->getEnvironment() != 'test') {
+                    if ($background && $this->container->get('kernel')->getEnvironment() != 'test') {
                         $msg = array('messagePackageId' => $messagePackage->getId());
                         $this->container->get('old_sound_rabbit_mq.send_message_package_producer')->setContentType('application/json');
                         $this->container->get('old_sound_rabbit_mq.send_message_package_producer')->publish(json_encode($msg));
