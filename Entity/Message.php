@@ -26,6 +26,10 @@ abstract class Message
 {
     const GROUP_CREATE = "message_group_create";
 
+    const BACKGROUND_BYDEFAULT = "background_bydefault";
+    const BACKGROUND_FORCETRUE = "background_forcetrue";
+    const BACKGROUND_FORCEFALSE = "background_forcefalse";
+
     use MinimalPackage;
     use ORMBehaviors\Timestampable\Timestampable;
 
@@ -339,6 +343,19 @@ abstract class Message
     public function getMyForm() {
         return "\Sopinet\ChatBundle\Form\MessageType";
     }
+
+    /**
+     * Dependiendo del estado forzará el envío de ese tipo de mensaje en Background o no
+     * BACKGROUND_BYDEFAULT: Lo dejará como esté configurado por defecto, opción habitual
+     * BACKGROUND_FORCETRUE: Forzará a True (hacer en background con ese mensaje)
+     * BACKGROUND_FORCEFALSE: Forzará a False (no hacer background con ese mensaje)
+     *
+     * @return string
+     */
+    public function getMyBackground() {
+        return self::BACKGROUND_BYDEFAULT;
+    }
+
     /**
      * Constructor
      */
