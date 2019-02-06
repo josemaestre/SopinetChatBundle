@@ -180,7 +180,8 @@ class InterfaceHelper
             $em->persist($device);
             $em->flush();
         } else {
-            throw new Exception("Form invalid");
+            return false;
+            // throw new Exception("Form invalid");
         }
 
         return $device;
