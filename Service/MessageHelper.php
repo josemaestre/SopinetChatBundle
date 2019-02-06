@@ -132,6 +132,8 @@ class MessageHelper {
             }
         } else {
             /** @var Device $device */
+            //Fix for devices loaded as lazy Proxy
+            $user->getDevices()->first();
             foreach($user->getDevices() as $device) {
                 if (($message->getFromDevice() == null || $message->getFromDevice()->getDeviceId() != $device->getDeviceId()) && $device->getState() == '1') {
                     // DEPRECATED! Next code is deprecated, now i pass message object for better iOS options
