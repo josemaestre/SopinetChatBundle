@@ -43,7 +43,9 @@ class SendMessagePackageConsumer implements ConsumerInterface
             $logger->error("JSON NULL");
             return false;
         }
-        $messagePackageId = $jsonBody->messagePackageId;
+        $messagePackageId = json_decode($msg->body)->messagePackageId;
+
+        $logger->error('tGuardado correctamente 1: ' . $messagePackageId);
 
         /** @var EntityManager $em */
         $em = $this->container->get('doctrine.orm.default_entity_manager');
@@ -52,20 +54,38 @@ class SendMessagePackageConsumer implements ConsumerInterface
         $reMessagePackage = $em->getRepository('SopinetChatBundle:MessagePackage');
         /** @var MessagePackage $messagePackage */
         $messagePackage = $reMessagePackage->findOneById($messagePackageId);
-        if ($messagePackage == null || $messagePackage->getMessage() == null) {
-            return false;
+        if ($messagePackage == null) return false;
+        if ($messagePackage->getMessage() == null) return false;;
+
+        $logger->error('Guardado correctamente 2: ' . $messagePackageId);
+
+        // TODO: This part should be same that <SEARCH_DUPLICATE>
+        if ($messagePackage->getToDevice()->getDeviceType() == Device::TYPE_ANDROID) {
+            $messagePackage->setProcessed(true); // Yes, processed
+        } elseif (
+            $messagePackage->getToDevice()->getDeviceType() == Device::TYPE_IOS ||
+            $messagePackage->getToDevice()->getDeviceType() == Device::TYPE_VIRTUALNONE
+        ) {
+            $messagePackage->setProcessed(false); // Not processed
         }
-        $messagePackage->setProcessed($messagePackage->getToDevice()->getDeviceType() == Device::TYPE_ANDROID);
-        try {
-            $response = $messageHelper->sendRealMessageToDevice($messagePackage->getMessage(), $messagePackage->getToDevice(), $messagePackage->getToUser(), $this->request, true);
-        } catch(\Exception $e) {
-            throw $e;
-        }
-        $messagePackage->setStatus($response ?
-            MessagePackage::STATUS_OK
-            : MessagePackage::STATUS_KO);
         $em->persist($messagePackage);
         $em->flush();
+        
+        $response = $messageHelper->sendRealMessageToDevice($messagePackage->getMessage(), $messagePackage->getToDevice(), $messagePackage->getToUser(), $this->request, true);
+        if ($response) {
+            $messagePackage->setStatus(MessagePackage::STATUS_OK);
+            if ($messagePackage->getMessage()->getMySenderEmailHas($this->container)) {
+                $messageHelper->sendMessageToEmail($messagePackage->getMessage(), $messagePackage->getToUser());
+            }
+        } else {
+            $messagePackage->setStatus(MessagePackage::STATUS_KO);
+        }
+
+        $em->persist($messagePackage);
+        $em->flush();
+
+        // TODO: End <SEARCH_DUPLICATE>
+
         return true;
     }
 }
