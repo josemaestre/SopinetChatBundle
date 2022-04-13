@@ -1,6 +1,6 @@
 {
-  "name": "sopinet/chatbundle",
-  "description": "Symfony * Bundle - Notification groups Bundle",
+  "name": "josemaestre/chatbundle",
+  "description": "Symfony 4 Bundle - Notification groups Bundle",
   "keywords": ["chat", "notification","gcm", "apns", "symfony2", "bundle", "sopinet"],
   "type": "symfony-bundle",
   "minimum-stability": "dev",
