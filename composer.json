@@ -1,6 +1,6 @@
 {
   "name": "sopinet/chatbundle",
-  "description": "Symfony2 Bundle - Notification groups Bundle",
+  "description": "Symfony * Bundle - Notification groups Bundle",
   "keywords": ["chat", "notification","gcm", "apns", "symfony2", "bundle", "sopinet"],
   "type": "symfony-bundle",
   "minimum-stability": "dev",
@@ -22,16 +22,16 @@
     }
   ],
   "require": {
-    "php": ">=5.3.9",
-    "sopinet/apihelper-bundle": ">=1.0",
-    "friendsofsymfony/user-bundle": ">=1.3",
-    "knplabs/doctrine-behaviors": ">=1.1",
-    "nelmio/api-doc-bundle": "~2.4",
-    "richsage/rms-push-notifications-bundle": "~0.2.0",
-    "stof/doctrine-extensions-bundle": ">=1.1",
-    "gos/web-socket-bundle": "~1.6",
-    "oldsound/rabbitmq-bundle": "1.*",
-    "vich/uploader-bundle": "^1.1"
+    "php": ">=7.4",
+    "sopinet/apihelper-bundle": "*",
+    "friendsofsymfony/user-bundle": "*",
+    "knplabs/doctrine-behaviors": "*",
+    "nelmio/api-doc-bundle": "*",
+    "richsage/rms-push-notifications-bundle": "*",
+    "stof/doctrine-extensions-bundle": "*",
+    "gos/web-socket-bundle": "*",
+    "oldsound/rabbitmq-bundle": "*",
+    "vich/uploader-bundle": "*"
   },
   "autoload": {
     "psr-0": { "Sopinet\\ChatBundle": "" }
