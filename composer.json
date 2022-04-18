@@ -23,7 +23,7 @@
   ],
   "require": {
     "php": ">=7.4",
-    "sopinet/apihelper-bundle": "*",
+    "josemaestre/apihelper-bundle": "*",
     "friendsofsymfony/user-bundle": "*",
     "knplabs/doctrine-behaviors": "*",
     "nelmio/api-doc-bundle": "*",
