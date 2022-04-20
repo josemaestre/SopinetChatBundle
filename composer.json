@@ -30,7 +30,7 @@
     "richsage/rms-push-notifications-bundle": "*",
     "stof/doctrine-extensions-bundle": "*",
     "gos/web-socket-bundle": "*",
-    "oldsound/rabbitmq-bundle": "*",
+    "josemaestre/rabbitmq-bundle": "*",
     "vich/uploader-bundle": "*"
   },
   "autoload": {
